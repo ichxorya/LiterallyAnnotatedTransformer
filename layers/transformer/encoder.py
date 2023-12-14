@@ -49,7 +49,7 @@ class Encoder(nn.Module):
         # Define the attributes of the class.
         ## Define the multi-head attention layer.
         self.self_attention: MultiHeadAttention = MultiHeadAttention(
-            d_model, h, dropout_rate
+            h, d_model, dropout_rate
         )
 
         ## Define the feed-forward layer.

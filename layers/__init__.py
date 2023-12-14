@@ -10,6 +10,8 @@ from .transformer import (
     FeedForward,
     Normalizer,
     MultiHeadAttention,
+    Encoder,
+    Decoder,
 )
 from typing_extensions import List
 
@@ -20,4 +22,6 @@ __all__: List[str] = [
     "FeedForward",
     "Normalizer",
     "MultiHeadAttention",
+    "Encoder",
+    "Decoder",
 ]

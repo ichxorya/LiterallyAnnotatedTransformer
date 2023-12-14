@@ -126,7 +126,7 @@ class PositionalEncoder(nn.Module):
         # Return the output.
         return x_o
 
-    # @torch.jit.script -- Turned off due to a bug.
+    @torch.jit.script
     def splice_by_size(
         self, source: torch.Tensor, target: torch.Tensor
     ) -> torch.Tensor:

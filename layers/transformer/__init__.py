@@ -9,6 +9,8 @@ from .positional_encoder import PositionalEncoder
 from .feed_forward import FeedForward
 from .normalizer import Normalizer
 from .multi_head_attention import MultiHeadAttention
+from .encoder import Encoder
+from .decoder import Decoder
 from typing_extensions import List
 
 # Define the list of exported names.
@@ -18,4 +20,6 @@ __all__: List[str] = [
     "FeedForward",
     "Normalizer",
     "MultiHeadAttention",
+    "Encoder",
+    "Decoder",
 ]
