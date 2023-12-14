@@ -48,7 +48,7 @@ class FeedForward(nn.Module):
         Args:
             - `d_model` (`int`): The dimensionality of the model (a.k.a the size of the word embedding).
             - `d_ff` (`int`): The dimensionality of the feed forward layer. Defaults to 2048.
-            - `internal_activation` (`Callable`): The internal activation function. Defaults to ReLU.
+            - `internal_activation` (`Callable[[torch.Tensor], torch.Tensor]`): The internal activation function. Defaults to ReLU.
             - `dropout_rate` (`float`): The dropout rate of the Dropout layer.
         """
         # Call the constructor of the parent class.

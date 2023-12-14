@@ -14,7 +14,7 @@ import torch
 import torch.nn as nn
 
 
-# Define the class InputEmbedder.
+# Define the class Embedder.
 class Embedder(nn.Module):
     """
     The Embedder layer of the Transformer Model.

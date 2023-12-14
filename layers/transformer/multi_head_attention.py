@@ -37,40 +37,40 @@ class MultiHeadAttention(nn.Module):
         - `w_o` (`nn.Linear`): The output as a Linear layer.
 
     Methods:
-        - `__init__(self, num_heads: int, d_model: int, dropout_rate: float = 0.1)`: Initialize the Multi-Head Attention layer.
+        - `__init__(self, h: int, d_model: int, dropout_rate: float = 0.1)`: Initialize the Multi-Head Attention layer.
         - `forward(self, q: torch.Tensor, k: torch.Tensor, v: torch.Tensor, mask: Optional[torch.Tensor] = None)
         -> Tuple[torch.Tensor, torch.Tensor]`: Calculate the attention output and attention scores, using the Scaled Dot-product Attention with multiple heads.
         - `attention(self, q: torch.Tensor, k: torch.Tensor, v: torch.Tensor, mask: Optional[torch.Tensor] = None, dropout: Optional[nn.Dropout] = None)
         -> Tuple[torch.Tensor, torch.Tensor]`: Calculate the attention output and attention scores, using the Scaled Dot-product Attention.
     """
 
-    def __init__(self, num_heads: int, d_model: int, dropout_rate: float = 0.1):
+    def __init__(self, h: int, d_model: int, dropout_rate: float = 0.1):
         """
         Initialize the Multi-Head Attention layer.
 
         Args:
-            - `num_heads` (`int`): The number of heads.
+            - `h` (`int`): The number of heads.
             - `d_model` (`int`): The dimensionality of the model (a.k.a the size of the word embedding).
             - `dropout_rate` (`float`): The dropout rate of the Dropout layer.
 
         Raises:
-            - `AssertionError`: If `d_model` is not divisible by `num_heads`.
+            - `AssertionError`: If `d_model` is not divisible by `h`.
         """
         # Call the constructor of the parent class.
         super().__init__()
 
         # Define the attributes of the class.
-        ## Check if `d_model` is divisible by `num_heads`.
-        assert d_model % num_heads == 0, "`d_model` must be divisible by `num_heads`."
+        ## Check if `d_model` is divisible by `h`.
+        assert d_model % h == 0, "`d_model` must be divisible by `h`."
 
         ## Define the dimensionality of the model.
         self.d_model: int = d_model
 
         ## Define the number of heads.
-        self.h: int = num_heads
+        self.h: int = h
 
         ## Define the dimensionality of each head.
-        self.d_k: int = d_model // num_heads
+        self.d_k: int = d_model // h
 
         ## Define the Dropout layer.
         self.dropout: nn.Dropout = nn.Dropout(p=dropout_rate)
@@ -100,8 +100,9 @@ class MultiHeadAttention(nn.Module):
             - `mask` (`Optional[torch.Tensor]`): The mask to apply to the attention scores. Defaults to `None`.
 
         Returns:
-            - `attention_o` (`torch.Tensor`): The output of the attention process.
-            - `attention_s` (`torch.Tensor`): The attention scores.
+            - `Tuple[torch.Tensor, torch.Tensor]`:
+                - `attention_o` (`torch.Tensor`): The output of the attention process.
+                - `attention_s` (`torch.Tensor`): The attention scores.
 
         Notes:
             - `q`, `k`, and `v` should all have the same shape: [batch_size, sequence_length, d_model].
@@ -157,8 +158,9 @@ class MultiHeadAttention(nn.Module):
             - `dropout` (`Optional[nn.Dropout]`): The Dropout layer. Defaults to `None`.
 
         Returns:
-            - `attention_o` (`torch.Tensor`): The output of the attention process.
-            - `attention_s` (`torch.Tensor`): The attention scores.
+            - `Tuple[torch.Tensor, torch.Tensor]`:
+                - `attention_o` (`torch.Tensor`): The output of the attention process.
+                - `attention_s` (`torch.Tensor`): The attention scores.
 
         Notes:
             - `q`, `k`, and `v` should all have the same shape: [batch_size, sequence_length, d_model].
