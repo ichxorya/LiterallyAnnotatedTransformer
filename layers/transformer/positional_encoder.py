@@ -14,7 +14,6 @@ import logging
 import math
 import torch
 import torch.nn as nn
-from typing_extensions import Callable
 
 
 # Define the class PositionalEncoder.
@@ -60,7 +59,7 @@ class PositionalEncoder(nn.Module):
 
         ## Define the positional encoding.
         ### Initialize the positional encoding as a tensor of zeros.
-        self.positional_encoding: torch.Tensor = torch.zeros(
+        positional_encoding: torch.Tensor = torch.zeros(
             (max_seq_length, d_model)  # Shape: (max_seq_length, d_model)
         )
 
@@ -69,15 +68,15 @@ class PositionalEncoder(nn.Module):
             ### And for each 2 dimensions from 0 to d_model (a.k.a each 2 tokens in the sequence):
             for dim in range(0, d_model, 2):
                 ### Compute the positional encoding.
-                self.positional_encoding[pos, dim] = math.sin(
+                positional_encoding[pos, dim] = math.sin(
                     pos / (10000 ** (2 * dim / d_model))
                 )
-                self.positional_encoding[pos, dim + 1] = math.cos(
+                positional_encoding[pos, dim + 1] = math.cos(
                     pos / (10000 ** ((2 * dim + 1) / d_model))
                 )
 
         ### Register the positional encoding as a buffer (non-parameter).
-        self.register_buffer("positional_encoding", self.positional_encoding)
+        self.register_buffer("positional_encoding", positional_encoding)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
@@ -111,8 +110,10 @@ class PositionalEncoder(nn.Module):
         x_o: torch.Tensor = torch.mul(x, math.sqrt(self.d_model))
 
         # Splice the positional encoding by the size of the input sequence.
+        ## Note: Turn off type-checking for this line because of a logic error with registering the positional encoding as a buffer.
         positional_encoding: torch.Tensor = self.splice_by_size(
-            self.positional_encoding, x_o
+            source=self.positional_encoding,  # type: ignore
+            target=x_o,
         )
         self.positional_encoding = positional_encoding.requires_grad_(False)
 
@@ -125,7 +126,7 @@ class PositionalEncoder(nn.Module):
         # Return the output.
         return x_o
 
-    @torch.jit.script
+    # @torch.jit.script -- Turned off due to a bug.
     def splice_by_size(
         self, source: torch.Tensor, target: torch.Tensor
     ) -> torch.Tensor:

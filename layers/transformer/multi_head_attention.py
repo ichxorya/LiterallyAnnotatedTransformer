@@ -136,7 +136,7 @@ class MultiHeadAttention(nn.Module):
         attention_o = self.w_o(attention_o)
 
         # Return the attention output and attention scores.
-        return attention_o, attention_s
+        return (attention_o, attention_s)
 
     def attention(
         self,
